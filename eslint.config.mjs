@@ -40,9 +40,4 @@ export default [
   {
     ignores: ["tailwind.config.js", "next.config.js", "*.js"],
   },
-  {
-    globals: {
-      process: true,
-    },
-  },
 ];
