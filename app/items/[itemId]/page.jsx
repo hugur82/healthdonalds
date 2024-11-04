@@ -1,7 +1,16 @@
 "use client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,16 +22,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { CATEGORIES } from "@/lib/category-data";
 import Image from "next/image";
-import { ImageInput } from "@/components/features/images/image-input";
+import ImageInput from "@/components/features/images/image-input";
+import getId from "@/lib/get-id";
+import setItem from "@/lib/items/set-item";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/lib/store/use-User-Store";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { X } from "lucide-react";
 
 const formSchema = z.object({
   id: z.string().min(2).max(50),
@@ -33,20 +41,35 @@ const formSchema = z.object({
 });
 
 export default function ItemIdPage() {
+  const isAdmin = useUserStore((s) => s.isAdmin);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       id: "xx",
-      username: "",
     },
   });
+  const router = useRouter();
 
-  console.log(form.formState.errors);
+  if (!isAdmin) {
+    return (
+      <Alert>
+        <X size={12}></X>
+        <AlertTitle>You can't creat item</AlertTitle>
+      </Alert>
+    );
+  }
 
-  function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log({ values });
+  async function onSubmit(values) {
+    console.log(values);
+    const id = getId(values.name);
+    alert(id);
+    await setItem(id, {
+      name: values.name,
+      price: values.price * 100,
+      category: values.category,
+      image: values.image,
+    });
+    router.push("/");
   }
   return (
     <div>
@@ -84,11 +107,11 @@ export default function ItemIdPage() {
                   </FormControl>
                   <SelectContent>
                     {CATEGORIES.map((c) => (
-                      <SelectItem key={c.id} value={c.id}>
-                        <span className="flex items-center gap-2">
+                      <SelectItem key={c.id} value={c.title}>
+                        <div className="flex items-center gap-2">
                           <Image src={c.logo} width={32} height={32} />
-                          <p>{c.title}</p>
-                        </span>
+                          <p>{c.title} </p>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -103,9 +126,9 @@ export default function ItemIdPage() {
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Price</FormLabel>
+                <FormLabel>price</FormLabel>
                 <FormControl>
-                  <Input placeholder="" type="number" {...field} />
+                  <Input placeholder="" {...field} type="number" />
                 </FormControl>
 
                 <FormMessage />
@@ -126,7 +149,7 @@ export default function ItemIdPage() {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">
+          <Button type="submit" className="w-full">
             Submit
           </Button>
         </form>

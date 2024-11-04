@@ -53,7 +53,7 @@ export default function LoginPage() {
           router.push("/");
         }}
       >
-        <Input type="text" name="userName" placeHolder="Username" />
+        <Input type="text" name="userName" placeholder="Username" />
         <Button type="submit">Login</Button>
       </form>
     </div>
