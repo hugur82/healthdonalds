@@ -7,6 +7,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { useUserStore } from "@/lib/store/use-User-Store";
 import { User } from "lucide-react";
+import { useCartQuantity, useCartStore } from "@/lib/store/use-cart-store";
 
 const Header = () => {
   return (
@@ -22,19 +23,27 @@ const Header = () => {
       </Link>
       <div className="ml-auto"></div>
       <UserNameHeader />
-      <Button
-        size="sm"
-        variant="outline"
-        className="inline-flex gap-2 items-center"
-      >
-        0
-        <ShoppingBasket size={12} />
-      </Button>
+      <ShoppingCart />
     </header>
   );
 };
 
 export default Header;
+
+const ShoppingCart = () => {
+  const quantity = useCartQuantity();
+
+  return (
+    <Button
+      size="sm"
+      variant="outline"
+      className="inline-flex gap-2 items-center"
+    >
+      {quantity}
+      <ShoppingBasket size={12} />
+    </Button>
+  );
+};
 
 const UserNameHeader = () => {
   const userName = useUserStore((s) => s.userName);
