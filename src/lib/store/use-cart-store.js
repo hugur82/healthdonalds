@@ -29,10 +29,15 @@ export const useCartStore = create(
       removeItem: (item) => {
         set((state) => {
           const itemId = item.id;
-          state.items[itemId] = {
-            item,
-            quantity: state.items[itemId].quantity - 1,
-          };
+          if (state.items[itemId]) {
+            state.items[itemId] = {
+              item,
+              quantity: state.items[itemId].quantity - 1,
+            };
+            if (state.items[itemId].quantity <= 0) {
+              delete state.items[itemId];
+            }
+          }
           return { ...state.items };
         });
       },
@@ -45,8 +50,18 @@ export const useCartStore = create(
 
 export const useCartQuantity = () => {
   return useCartStore((s) => {
-    return Object.values(s.items).reduce((acc, val) => {
-      return acc + val.quantity;
+    return Object.values(s.items).reduce((acc, curr) => {
+      if (!curr.quantity) return acc;
+      return acc + curr.quantity;
+    }, 0);
+  });
+};
+
+export const useCartPrice = () => {
+  return useCartStore((s) => {
+    return Object.values(s.items).reduce((acc, curr) => {
+      if (!curr.quantity) return acc;
+      return acc + curr.quantity * curr.item.price;
     }, 0);
   });
 };
