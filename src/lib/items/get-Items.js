@@ -1,16 +1,23 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
-export const getItems = async () => {
-  const itemsCollection = collection(db, "items");
-  const itemsResult = await getDocs(itemsCollection);
+export const getItems = async (category) => {
+  let request = collection(db, "items");
 
-  const data = [];
+  if (category) {
+    request = query(request, where("category", "==", category));
+  }
+
+  const itemsResult = await getDocs(request);
+
+  const items = [];
   itemsResult.forEach((i) => {
-    data.push({
+    const item = {
       id: i.id,
       ...i.data(),
-    });
+    };
+
+    items.push(item);
   });
-  return data;
+  return items;
 };
