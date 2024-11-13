@@ -26,7 +26,7 @@ export const FooterCart = () => {
         {" "}
         {open ? <ChevronDown size={12} /> : <ChevronUp size={12} />}
       </Button>
-      {open ? <ItemsCart /> : null}
+      {open ? <ItemsCart className="max-h-32" /> : null}
       <div className="flex items-center gap-2">
         <Link href="/checkout" className={buttonVariants({ size: "sm" })}>
           Checkout

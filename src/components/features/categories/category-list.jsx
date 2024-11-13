@@ -1,6 +1,7 @@
 import { CATEGORIES } from "@/lib/category-data";
 import { useCategoryStore } from "@/lib/store/use-category-store";
 import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
 import Image from "next/image";
 
 export const CategoryList = () => {
@@ -26,6 +27,18 @@ export const CategoryList = () => {
           <p className="text-xs">{c.title}</p>
         </button>
       ))}
+      {category !== null && (
+        <button
+          onClick={() => {
+            setCategory(null);
+          }}
+          className={cn(
+            "relative rounded-md border p-2 flex flex-col items-center"
+          )}
+        >
+          <X color="#c71f1f" width={32} height={52} />
+        </button>
+      )}
     </div>
   );
 };
