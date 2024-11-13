@@ -20,7 +20,7 @@ export default function Home() {
     <div className="flex flex-col gap-8 max-h-full">
       <ItemsCart />
       <UpSellDessert />
-      <Link href="/checkout/succes" className={buttonVariants({ size: "sm" })}>
+      <Link href="/checkout/success" className={buttonVariants({ size: "sm" })}>
         Complete Checkout
       </Link>
     </div>
