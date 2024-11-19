@@ -15,7 +15,7 @@ export default function Home() {
     <div className="flex flex-col  max-h-full">
       <div className="flex flex-1 gap-4 overflow-hidden">
         <CategoryList />
-        {userName !== "admin" ? <ItemsList /> : <ItemIdPage></ItemIdPage>}
+        <ItemsList />
       </div>
       <FooterCart />
     </div>

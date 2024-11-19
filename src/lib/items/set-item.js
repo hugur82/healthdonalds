@@ -6,14 +6,18 @@ const setItem = async (id, item) => {
   if (item.image instanceof File) {
     const path = `images/${item.image.name}`;
     const storageRef = ref(storage, path);
-    await uploadBytes(storageRef, item.image);
-    const downloadUrl = await getDownloadURL(storageRef);
-    item.image = downloadUrl;
-    item.imagePath = path;
+    try {
+      await uploadBytes(storageRef, item.image);
+      const downloadUrl = await getDownloadURL(storageRef);
+      item.image = downloadUrl;
+      item.imagePath = path;
+    } catch {
+      console.error(e);
+    }
   }
 
-  const file = doc(db, "items", id);
-  await setDoc(file, item);
+  const docRef = doc(db, "items", id);
+  await setDoc(docRef, item);
 };
 
 export default setItem;

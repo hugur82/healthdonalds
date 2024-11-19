@@ -1,5 +1,17 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format-price";
+import { deleteItem } from "@/lib/items/delete-item";
 import useAdminStore from "@/lib/store/use-admin-store";
 import { useCartStore } from "@/lib/store/use-cart-store";
 import { cn } from "@/lib/utils";
@@ -8,6 +20,8 @@ import { Trash } from "lucide-react";
 import { Plus } from "lucide-react";
 import { Minus } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
+import { mutate } from "swr";
 
 export const Item = ({ item, className }) => {
   const adminEnabled = useAdminStore((s) => s.adminEnabled);
@@ -26,9 +40,7 @@ export const Item = ({ item, className }) => {
           >
             <Edit size={12} />
           </Link>
-          <Button size="sm" variant="ouline">
-            <Trash size={12} />
-          </Button>
+          <DeleteButton item={item}></DeleteButton>
         </div>
       ) : null}
       <p className="absolute right-2 top-2 font-mono">
@@ -40,10 +52,43 @@ export const Item = ({ item, className }) => {
       />
       <p>{item.name}</p>
       <div className="flex">
-        <div className="ml-auto"></div>
         <CartButton item={item} />
       </div>
     </div>
+  );
+};
+
+const DeleteButton = ({ item }) => {
+  const onDelete = async () => {
+    await deleteItem(item);
+    toast.success("item was deleted");
+    mutate((key) => typeof key === "string" && key.startsWith("/items"));
+  };
+
+  return (
+    <>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button size="sm" variant="ouline">
+            <Trash size={12} />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure you want to delete item {item.id}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure? your action is irreversible!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={onDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 
