@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AdminActions from "@/components/features/admin/admin-actions";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
         )}
       >
         <Toaster />
+        <AdminActions />
         <div className="min-h-full border-x max-w-md m-auto flex flex-col">
           <Header />
           <main className="flex-1 px-4 py-2">{children}</main>

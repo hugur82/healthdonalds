@@ -1,5 +1,9 @@
 "use client";
+<<<<<<< HEAD
 import { Button } from "@/components/ui/button";
+=======
+import { Button, buttonVariants } from "@/components/ui/button";
+>>>>>>> 11791a97a4d1c3fe7908193a9cb27e1a8c3786d0
 import { formatPrice } from "@/lib/format-price";
 import { useCartPrice, useCartStore } from "@/lib/store/use-cart-store";
 import { ChevronUp } from "lucide-react";
@@ -7,11 +11,19 @@ import { Minus } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { Trash } from "lucide-react";
 import { useState } from "react";
+<<<<<<< HEAD
+=======
+import { ItemsCart } from "../cart/items-cart";
+import Link from "next/link";
+>>>>>>> 11791a97a4d1c3fe7908193a9cb27e1a8c3786d0
 
 export const FooterCart = () => {
   const [open, setOpen] = useState(false);
 
+<<<<<<< HEAD
   const cart = useCartStore();
+=======
+>>>>>>> 11791a97a4d1c3fe7908193a9cb27e1a8c3786d0
   const price = useCartPrice();
 
   return (
@@ -25,6 +37,7 @@ export const FooterCart = () => {
         {" "}
         {open ? <ChevronDown size={12} /> : <ChevronUp size={12} />}
       </Button>
+<<<<<<< HEAD
       {open ? (
         <>
           <div className="flex items-center gap-4">
@@ -46,6 +59,13 @@ export const FooterCart = () => {
         <Button className="w-full" size="sm">
           Checkout
         </Button>
+=======
+      {open ? <ItemsCart className="max-h-32" /> : null}
+      <div className="flex items-center gap-2">
+        <Link href="/checkout" className={buttonVariants({ size: "sm" })}>
+          Checkout
+        </Link>
+>>>>>>> 11791a97a4d1c3fe7908193a9cb27e1a8c3786d0
         {!open ? (
           <p className="ml-auto font-mono">{formatPrice(price)}</p>
         ) : null}
@@ -53,6 +73,7 @@ export const FooterCart = () => {
     </div>
   );
 };
+<<<<<<< HEAD
 
 const CartLineItem = ({ item, quantity }) => {
   const remove = useCartStore((s) => s.removeItem);
@@ -74,3 +95,5 @@ const CartLineItem = ({ item, quantity }) => {
     </div>
   );
 };
+=======
+>>>>>>> 11791a97a4d1c3fe7908193a9cb27e1a8c3786d0
